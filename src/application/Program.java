@@ -1,19 +1,18 @@
 package application;
 
 import db.DB;
+import entities.Person;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Scanner sc = new Scanner(System.in);
+        Person person = new Person();
 
         System.out.print("CHOOSE A OPTION \n1. INSERT \n2. CHECK \n3. UPDATE \n4. DELETE \n5. EXIT\n");
         int asw = sc.nextInt();
@@ -21,21 +20,35 @@ public class Program {
 
         try (Connection conn = DB.getConnection(); Statement st = conn.createStatement()) {
             switch (asw) {
-
-
                 case 1:
                     PreparedStatement ps = conn.prepareStatement("INSERT INTO person (Name, Birth, CEP , Email, Phone, Password)" + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
                     System.out.print("Name: ");
-                    ps.setString(1, sc.nextLine());
+                    String name = sc.nextLine();
+                    person.setName(name);
+                    ps.setString(1, person.getName());
+
                     System.out.print("Birth date: (dd/MM/yyyy): ");
-                    ps.setDate(2, new Date(sdf.parse(sc.nextLine()).getTime()));
+                    String date = sc.nextLine();
+                    person.setBirth(date);
+                    ps.setString(2, person.getBirth());
+
                     System.out.print("CEP: ");
-                    ps.setString(3, sc.next());
+                    String CEP = sc.nextLine();
+                    person.setCEP(CEP);
+                    ps.setString(3, person.getCEP());
+
                     System.out.print("Email: ");
-                    ps.setString(4, sc.next());
+                    String email = sc.nextLine();
+                    person.setEmail(email);
+                    ps.setString(4, person.getEmail());
+
+
                     System.out.print("Phone: ");
-                    ps.setString(5, sc.next());
-                    sc.nextLine();
+                    String phone = sc.nextLine();
+                    person.setPhone(phone);
+                    ps.setString(5, person.getPhone());
+
                     System.out.print("Password: ");
                     String pass = sc.nextLine();
                     String passHex = "";
@@ -50,7 +63,9 @@ public class Program {
                     } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    ps.setString(6, passHex);
+                    person.setPassword(passHex);
+                    ps.setString(6, person.getPassword());
+
                     int rowsAffected = ps.executeUpdate();
                     if (rowsAffected > 0) {
                         ResultSet rs = ps.getGeneratedKeys();
@@ -96,7 +111,7 @@ public class Program {
                     System.out.println("DONE! Rows Affected: " + rowsAffected2);
                     break;
             }
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 

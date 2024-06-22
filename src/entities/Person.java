@@ -1,11 +1,5 @@
 package entities;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 public class Person {
     private String name;
     private String birth;
@@ -14,10 +8,11 @@ public class Person {
     private String phone;
     private String password;
 
-    public Person (){
+    public Person(){
+
     }
 
-    public Person (String name, String birth, String CEP, String email, String phone, String password) {
+    public Person(String name, String birth, String CEP, String email, String phone, String password) {
         this.name = name;
         this.birth = birth;
         this.CEP = CEP;
@@ -39,17 +34,7 @@ public class Person {
     }
 
     public void setBirth(String birth) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            PreparedStatement ps = null;
-            ps.setDate(3, new Date(sdf.parse(birth).getTime()));
-            this.birth = birth;
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        this.birth = birth;
     }
 
     public String getCEP() {
@@ -75,8 +60,12 @@ public class Person {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

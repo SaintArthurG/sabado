@@ -26,11 +26,11 @@ public class DB {
 
 
     private static Properties loadProperties() {
-        try (FileInputStream fis = new FileInputStream("db.properties")) {
+            try (FileInputStream fis = new FileInputStream("C:\\Users\\cazoo\\Desktop\\sabado\\sabado\\db.properties")) {
             Properties prop = new Properties();
             prop.load(fis);
             return prop;
-        } catch (IOException e ){
+        } catch (IOException e ) {
             throw new DbException(e.getMessage());
         }
     }
